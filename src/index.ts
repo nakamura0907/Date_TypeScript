@@ -1,55 +1,76 @@
 const LOCATION: string = "Asia/Tokyo";
 const DATE: Date = new Date();
 
-export const year = (): number => {
-  return DATE.getFullYear();
+export const year = (date: Date = new Date()): number => {
+  return date.getFullYear();
 };
 
-export const month = (): number => {
-  return DATE.getMonth() + 1;
+export const month = (date: Date = new Date()): number => {
+  return date.getMonth() + 1;
 };
 
-export const date = (): number => {
-  return DATE.getDate();
+export const date = (date: Date = new Date()): number => {
+  return date.getDate();
 };
 
-export const today = (separator: string = ""): string => {
+export const today = (separator: string = "", d: Date = new Date()): string => {
   if (separator) {
-    return year() + separator + month() + separator + date();
+    return year(d) + separator + month(d) + separator + date(d);
   }
-  return year() + "年" + month() + "月" + date() + "日";
+  return year(d) + "年" + month(d) + "月" + date(d) + "日";
 };
 
-export const time = (separator: string = "", flag: boolean = false): string => {
-  let hh: string | number = DATE.getHours();
-  let mm: string | number = DATE.getMinutes();
-  let ss: string | number = DATE.getSeconds();
-
+export const hours = (
+  date: Date = new Date(),
+  flag: boolean = false
+): string | number => {
+  let hh: string | number = date.getHours();
   if (flag) {
-    if (hh < 10) {
-      hh = "0" + hh;
-    }
-    if (mm < 10) {
-      mm = "0" + mm;
-    }
-    if (ss < 10) {
-      ss = "0" + ss;
-    }
+    hh = format(hh);
   }
+  return hh;
+};
 
+export const minutes = (
+  date: Date = new Date(),
+  flag: boolean = false
+): string | number => {
+  let mm: string | number = date.getMinutes();
+  if (flag) {
+    mm = format(mm);
+  }
+  return mm;
+};
+
+export const seconds = (
+  date: Date = new Date(),
+  flag: boolean = false
+): string | number => {
+  let ss: string | number = date.getSeconds();
+  if (flag) {
+    ss = format(ss);
+  }
+  return ss;
+};
+
+export const time = (
+  separator: string = "",
+  date: Date = new Date(),
+  flag: boolean = false
+): string => {
+  const hh: string | number = hours(date, flag);
+  const mm: string | number = minutes(date, flag);
+  const ss: string | number = seconds(date, flag);
   if (separator) {
     return hh + separator + mm + separator + ss;
   }
-
   return hh + "時" + mm + "分" + ss + "秒";
 };
 
-export const fullYear = (): string => {
-  return DATE.toLocaleString();
+const format = (time: number): string | number => {
+  let result: string | number = time;
+  if (result < 10) {
+    result = "0" + result;
+  }
+  return result;
 };
-
-console.log(today()); // YYYY年MM月DD日
-console.log(today("/")); // YYYY/MM/DD
-console.log(time()); // H時M分S秒
-console.log(time(":")); // H:M:S
-console.log(time("", true)); // HH時:MM分:SS秒
