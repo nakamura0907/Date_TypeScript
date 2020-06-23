@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
-    "watch": "webpack -w",
+    "tsc": "tsc",
     "test": "jest --watchAll"
   },
   "keywords": [],

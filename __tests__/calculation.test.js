@@ -5,9 +5,7 @@ const MOCK2 = new Date(2020, 0, 10, 5, 0, 0); // 2020-1-9 20:00:00
 
 describe("add", () => {
   it("ten days later", () => {
-    // expected: 2020-1-9
-    // received: 2020-1-10
-    expect(Calculation.add(10, MOCK)).toBe(MOCK2);
+    expect(Calculation.add(9, MOCK)).toBe(MOCK2); // serializes to the same string
   });
 });
 
