@@ -5,12 +5,15 @@ class NakamuraCalendar {
     this.date = date;
   }
 
-  getDate(): string {
+  getDate(format: string = ""): string {
+    if (format != "") {
+      return this.format(format);
+    }
     return this.date.toString();
   }
 
-  add(date: Date, plus: number, unit: string = "day"): NakamuraCalendar {
-    const time: number = date.getTime() + plus * this.getMillisecond(unit);
+  add(plus: number, unit: string = "day"): NakamuraCalendar {
+    const time: number = this.date.getTime() + plus * this.getMillisecond(unit);
     return new NakamuraCalendar(new Date(time));
   }
 
@@ -20,7 +23,36 @@ class NakamuraCalendar {
   }
 
   private format(format: string): string {
-    return "hoge";
+    let result: string;
+    result = format
+      .replace(/%Y/gi, String(this.date.getFullYear()))
+      .replace(/%M/g, String(this.date.getMonth() + 1))
+      .replace(/%D/gi, String(this.date.getDate()))
+      .replace(/%hh/gi, () => {
+        let hours = this.date.getHours();
+        if (hours < 10) {
+          return "0" + hours;
+        }
+        return String(hours);
+      })
+      .replace(/%mm/g, () => {
+        let minutes = this.date.getMinutes();
+        if (minutes < 10) {
+          return "0" + minutes;
+        }
+        return String(minutes);
+      })
+      .replace(/%ss/gi, () => {
+        let seconds = this.date.getSeconds();
+        if (seconds < 10) {
+          return "0" + seconds;
+        }
+        return String(seconds);
+      })
+      .replace(/%h/gi, String(this.date.getHours()))
+      .replace(/%m/g, String(this.date.getMinutes()))
+      .replace(/%s/gi, String(this.date.getSeconds()));
+    return result;
   }
 
   private getMillisecond(unit: string): number {
@@ -48,6 +80,4 @@ class NakamuraCalendar {
   }
 }
 
-let hoge = new NakamuraCalendar(new Date(2020, 6, 15, 12, 30, 0));
-console.log("day: ", hoge.diff(new Date(2020, 6, 30, 12, 30, 0), "day"));
-console.log("week: ", hoge.diff(new Date(2020, 6, 30, 12, 30, 0), "week"));
+export default NakamuraCalendar;

@@ -1,21 +1,57 @@
-"use strict";
 var NakamuraCalendar = /** @class */ (function () {
     function NakamuraCalendar(date) {
         if (date === void 0) { date = new Date(); }
         this.date = date;
     }
-    NakamuraCalendar.prototype.getDate = function () {
+    NakamuraCalendar.prototype.getDate = function (format) {
+        if (format === void 0) { format = ""; }
+        if (format != "") {
+            return this.format(format);
+        }
         return this.date.toString();
     };
-    NakamuraCalendar.prototype.add = function (date, plus, unit) {
+    NakamuraCalendar.prototype.add = function (plus, unit) {
         if (unit === void 0) { unit = "day"; }
-        var time = date.getTime() + plus * this.getMillisecond(unit);
+        var time = this.date.getTime() + plus * this.getMillisecond(unit);
         return new NakamuraCalendar(new Date(time));
     };
     NakamuraCalendar.prototype.diff = function (date, unit) {
         if (unit === void 0) { unit = "day"; }
         var millisecond = date.getTime() - this.date.getTime();
         return millisecond / this.getMillisecond(unit);
+    };
+    NakamuraCalendar.prototype.format = function (format) {
+        var _this = this;
+        var result;
+        result = format
+            .replace(/%Y/gi, String(this.date.getFullYear()))
+            .replace(/%M/g, String(this.date.getMonth() + 1))
+            .replace(/%D/gi, String(this.date.getDate()))
+            .replace(/%hh/gi, function () {
+            var hours = _this.date.getHours();
+            if (hours < 10) {
+                return "0" + hours;
+            }
+            return String(hours);
+        })
+            .replace(/%mm/g, function () {
+            var minutes = _this.date.getMinutes();
+            if (minutes < 10) {
+                return "0" + minutes;
+            }
+            return String(minutes);
+        })
+            .replace(/%ss/gi, function () {
+            var seconds = _this.date.getSeconds();
+            if (seconds < 10) {
+                return "0" + seconds;
+            }
+            return String(seconds);
+        })
+            .replace(/%h/gi, String(this.date.getHours()))
+            .replace(/%m/g, String(this.date.getMinutes()))
+            .replace(/%s/gi, String(this.date.getSeconds()));
+        return result;
     };
     NakamuraCalendar.prototype.getMillisecond = function (unit) {
         var millisecond;
@@ -42,6 +78,4 @@ var NakamuraCalendar = /** @class */ (function () {
     };
     return NakamuraCalendar;
 }());
-var hoge = new NakamuraCalendar(new Date(2020, 6, 15, 12, 30, 0));
-console.log("day: ", hoge.diff(new Date(2020, 6, 30, 12, 30, 0), "day"));
-console.log("week: ", hoge.diff(new Date(2020, 6, 30, 12, 30, 0), "week"));
+export default NakamuraCalendar;
