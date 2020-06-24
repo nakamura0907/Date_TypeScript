@@ -1,68 +1,102 @@
-var LOCATION = "Asia/Tokyo";
-var DATE = new Date();
-export var year = function (date) {
-    if (date === void 0) { date = new Date(); }
-    return date.getFullYear();
-};
-export var month = function (date) {
-    if (date === void 0) { date = new Date(); }
-    return date.getMonth() + 1;
-};
-export var date = function (date) {
-    if (date === void 0) { date = new Date(); }
-    return date.getDate();
-};
-export var today = function (separator, d) {
-    if (separator === void 0) { separator = ""; }
-    if (d === void 0) { d = new Date(); }
-    if (separator) {
-        return year(d) + separator + month(d) + separator + date(d);
+var NakamuraCalendar = /** @class */ (function () {
+    function NakamuraCalendar(date) {
+        if (date === void 0) { date = new Date(); }
+        this.date = date;
     }
-    return year(d) + "年" + month(d) + "月" + date(d) + "日";
-};
-export var hours = function (date, flag) {
-    if (date === void 0) { date = new Date(); }
-    if (flag === void 0) { flag = false; }
-    var hh = date.getHours();
-    if (flag) {
-        hh = format(hh);
-    }
-    return hh;
-};
-export var minutes = function (date, flag) {
-    if (date === void 0) { date = new Date(); }
-    if (flag === void 0) { flag = false; }
-    var mm = date.getMinutes();
-    if (flag) {
-        mm = format(mm);
-    }
-    return mm;
-};
-export var seconds = function (date, flag) {
-    if (date === void 0) { date = new Date(); }
-    if (flag === void 0) { flag = false; }
-    var ss = date.getSeconds();
-    if (flag) {
-        ss = format(ss);
-    }
-    return ss;
-};
-export var time = function (separator, date, flag) {
-    if (separator === void 0) { separator = ""; }
-    if (date === void 0) { date = new Date(); }
-    if (flag === void 0) { flag = false; }
-    var hh = hours(date, flag);
-    var mm = minutes(date, flag);
-    var ss = seconds(date, flag);
-    if (separator) {
-        return hh + separator + mm + separator + ss;
-    }
-    return hh + "時" + mm + "分" + ss + "秒";
-};
-var format = function (time) {
-    var result = time;
-    if (result < 10) {
-        result = "0" + result;
-    }
-    return result;
-};
+    NakamuraCalendar.prototype.setDate = function (date) {
+        this.date = date;
+        return this;
+    };
+    NakamuraCalendar.prototype.getDate = function (format) {
+        if (format === void 0) { format = ""; }
+        if (format != "") {
+            return this.format(format);
+        }
+        return this.date.toString();
+    };
+    NakamuraCalendar.prototype.add = function (plus, unit, flag) {
+        if (unit === void 0) { unit = "day"; }
+        if (flag === void 0) { flag = false; }
+        var time = this.date.getTime() + plus * this.getMillisecond(unit);
+        if (flag) {
+            this.date = new Date(time);
+            return this;
+        }
+        return new NakamuraCalendar(new Date(time));
+    };
+    NakamuraCalendar.prototype.diff = function (date, unit) {
+        if (unit === void 0) { unit = "day"; }
+        var millisecond = date.getTime() - this.date.getTime();
+        return millisecond / this.getMillisecond(unit);
+    };
+    NakamuraCalendar.prototype.isBefore = function (date) {
+        if (this.date.getTime() - date.getTime() < 0) {
+            return true;
+        }
+        return false;
+    };
+    NakamuraCalendar.prototype.isAfter = function (date) {
+        if (this.date.getTime() - date.getTime() > 0) {
+            return true;
+        }
+        return false;
+    };
+    NakamuraCalendar.prototype.format = function (format) {
+        var _this = this;
+        var result;
+        result = format
+            .replace(/%Y/gi, String(this.date.getFullYear()))
+            .replace(/%M/g, String(this.date.getMonth() + 1))
+            .replace(/%D/gi, String(this.date.getDate()))
+            .replace(/%hh/gi, function () {
+            var hours = _this.date.getHours();
+            if (hours < 10) {
+                return "0" + hours;
+            }
+            return String(hours);
+        })
+            .replace(/%mm/g, function () {
+            var minutes = _this.date.getMinutes();
+            if (minutes < 10) {
+                return "0" + minutes;
+            }
+            return String(minutes);
+        })
+            .replace(/%ss/gi, function () {
+            var seconds = _this.date.getSeconds();
+            if (seconds < 10) {
+                return "0" + seconds;
+            }
+            return String(seconds);
+        })
+            .replace(/%h/gi, String(this.date.getHours()))
+            .replace(/%m/g, String(this.date.getMinutes()))
+            .replace(/%s/gi, String(this.date.getSeconds()));
+        return result;
+    };
+    NakamuraCalendar.prototype.getMillisecond = function (unit) {
+        var millisecond;
+        switch (unit) {
+            case "day":
+                millisecond = 86400000;
+                break;
+            case "hours":
+                millisecond = 3600000;
+                break;
+            case "week":
+                millisecond = 604800017;
+                break;
+            case "month":
+                millisecond = 2629800000;
+                break;
+            case "year":
+                millisecond = 31557600000;
+                break;
+            default:
+                millisecond = 86400000;
+        }
+        return millisecond;
+    };
+    return NakamuraCalendar;
+}());
+export default NakamuraCalendar;
