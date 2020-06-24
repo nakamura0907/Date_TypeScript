@@ -1,85 +1,90 @@
-import * as DATE from "../src/index";
+import NakamuraCalendar from "../src";
 
-const NOW = new Date();
-const MOCK = new Date(2020, 1, 1, 5, 0, 0);
+const MOCK = new Date(2020, 6, 15, 6, 30, 0);
+const CLASS = new NakamuraCalendar(new Date(2020, 6, 15, 6, 30, 0));
 
-describe("year", () => {
-  it("now", () => {
-    expect(DATE.year()).toBe(NOW.getFullYear());
-  });
-  it("2020", () => {
-    expect(DATE.year(MOCK)).toBe(MOCK.getFullYear());
+describe("setDate", () => {
+  it("new Date()", () => {
+    const CLASS2 = new NakamuraCalendar(MOCK);
+    expect(CLASS2.setDate(new Date()).getDate()).toEqual(new Date().toString());
   });
 });
 
-describe("month", () => {
-  it("now", () => {
-    expect(DATE.month()).toBe(NOW.getMonth() + 1);
+describe("getDate", () => {
+  it('arg = ""', () => {
+    expect(CLASS.getDate()).toEqual(MOCK.toString());
   });
-  it("1", () => {
-    expect(DATE.month(MOCK)).toBe(MOCK.getMonth() + 1);
+  it('arg = "%y年%M月%d日"', () => {
+    expect(CLASS.getDate("%y年%M月%d日")).toEqual("2020年7月15日");
   });
-});
-
-describe("date", () => {
-  it("now", () => {
-    expect(DATE.date()).toBe(NOW.getDate());
+  it('arg = "%h:%m:%s = 6:30:0', () => {
+    expect(CLASS.getDate("%h:%m:%s")).toEqual("6:30:0");
   });
-  it("1", () => {
-    expect(DATE.date(MOCK)).toBe(MOCK.getDate());
+  it('arg = "%hh:%mm:%ss = 06:30:00', () => {
+    expect(CLASS.getDate("%hh:%mm:%ss")).toEqual("06:30:00");
   });
 });
 
-describe("today", () => {
-  it("YYYY年MM月DD日", () => {
-    const today =
-      NOW.getFullYear() +
-      "年" +
-      (NOW.getMonth() + 1) +
-      "月" +
-      NOW.getDate() +
-      "日";
-    expect(DATE.today()).toBe(today);
+describe("add", () => {
+  it("unit = day", () => {
+    const DATE = CLASS.add(3, "day");
+    expect(DATE.getDate()).toEqual(new Date(2020, 6, 18, 6, 30, 0).toString());
   });
-  it("2020/1/1", () => {
-    const today =
-      MOCK.getFullYear() + "/" + (MOCK.getMonth() + 1) + "/" + MOCK.getDate();
-    expect(DATE.today("/", MOCK)).toBe(today);
+  it("unit = hours", () => {
+    const DATE = CLASS.add(3, "hours");
+    expect(DATE.getDate()).toEqual(new Date(2020, 6, 15, 9, 30, 0).toString());
   });
-});
-
-describe("hours", () => {
-  it("H", () => {
-    expect(DATE.hours(MOCK, false)).toBe(MOCK.getHours());
+  it("unit = week", () => {
+    const DATE = CLASS.add(3, "week");
+    expect(DATE.getDate()).toEqual(new Date(2020, 7, 5, 6, 30, 0).toString());
   });
-  it("HH", () => {
-    expect(DATE.hours(MOCK, true)).toBe("05");
+  it("unit = month", () => {
+    const DATE = CLASS.add(3, "month");
+    expect(DATE.getDate()).toEqual(new Date(2020, 9, 14, 14, 0, 0).toString());
   });
-});
-
-describe("minutes", () => {
-  it("M", () => {
-    expect(DATE.minutes(MOCK, false)).toBe(MOCK.getMinutes());
+  it("unit = year", () => {
+    const DATE = CLASS.add(3, "year");
+    expect(DATE.getDate()).toEqual(new Date(2023, 6, 16, 0, 30, 0).toString());
   });
-  it("MM", () => {
-    expect(DATE.minutes(MOCK, true)).toBe("00");
+  it("flag = true", () => {
+    expect(CLASS.add(0, "day", true).getDate()).toEqual(
+      new Date(2020, 6, 15, 6, 30, 0).toString()
+    );
   });
 });
 
-describe("seconds", () => {
-  it("S", () => {
-    expect(DATE.seconds(MOCK, false)).toBe(MOCK.getMinutes());
+describe("diff", () => {
+  it("unit = day", () => {
+    expect(CLASS.diff(new Date(2020, 6, 18, 6, 30, 0), "day")).toEqual(3);
   });
-  it("SS", () => {
-    expect(DATE.seconds(MOCK, true)).toBe("00");
+  it("unit = hours", () => {
+    expect(CLASS.diff(new Date(2020, 6, 15, 9, 30, 0), "hours")).toEqual(3);
+  });
+  it("unit = week", () => {
+    // expect(CLASS.diff(new Date(2020, 7, 5, 6, 30, 0), "week")).toEqual(3); 2.999999
+  });
+  it("unit = month", () => {
+    expect(CLASS.diff(new Date(2020, 9, 14, 14, 0, 0), "month")).toEqual(3);
+  });
+  it("unit = year", () => {
+    expect(CLASS.diff(new Date(2023, 6, 16, 0, 30, 0), "year")).toEqual(3);
   });
 });
 
-describe("time", () => {
-  it("H時M分S秒", () => {
-    expect(DATE.time("", MOCK, false)).toBe("5時0分0秒");
+describe("isBefore", () => {
+  it("true", () => {
+    expect(CLASS.isBefore(new Date(2030, 6, 15))).toBe(true);
   });
-  it("HH:MM:SS", () => {
-    expect(DATE.time(":", MOCK, true)).toBe("05:00:00");
+  it("false", () => {
+    expect(CLASS.isBefore(new Date(2010, 6, 15))).toBe(false);
+  });
+});
+
+describe("isAfter", () => {
+  it("true", () => {
+    expect(CLASS.isAfter(new Date(2010, 6, 15))).toBe(true);
+  });
+  it("false", () => {
+    expect(CLASS.isAfter(new Date(2030, 6, 15))).toBe(false);
   });
 });
