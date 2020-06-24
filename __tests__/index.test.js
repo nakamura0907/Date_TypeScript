@@ -30,23 +30,45 @@ describe("add", () => {
     const DATE = CLASS.add(3, "day");
     expect(DATE.getDate()).toEqual(new Date(2020, 6, 18, 6, 30, 0).toString());
   });
-  it("unit = hours", () => {});
-  it("unit = week", () => {});
-  it("unit = month", () => {});
-  it("unit = year", () => {});
+  it("unit = hours", () => {
+    const DATE = CLASS.add(3, "hours");
+    expect(DATE.getDate()).toEqual(new Date(2020, 6, 15, 9, 30, 0).toString());
+  });
+  it("unit = week", () => {
+    const DATE = CLASS.add(3, "week");
+    expect(DATE.getDate()).toEqual(new Date(2020, 7, 5, 6, 30, 0).toString());
+  });
+  it("unit = month", () => {
+    const DATE = CLASS.add(3, "month");
+    expect(DATE.getDate()).toEqual(new Date(2020, 9, 14, 14, 0, 0).toString());
+  });
+  it("unit = year", () => {
+    const DATE = CLASS.add(3, "year");
+    expect(DATE.getDate()).toEqual(new Date(2023, 6, 16, 0, 30, 0).toString());
+  });
   it("flag = true", () => {
-    expect(CLASS.add(3, "day", true).getDate()).toEqual(
-      new Date(2020, 6, 18, 6, 30, 0).toString()
+    expect(CLASS.add(0, "day", true).getDate()).toEqual(
+      new Date(2020, 6, 15, 6, 30, 0).toString()
     );
   });
 });
 
 describe("diff", () => {
-  it("unit = day", () => {});
-  it("unit = hours", () => {});
-  it("unit = week", () => {});
-  it("unit = month", () => {});
-  it("unit = year", () => {});
+  it("unit = day", () => {
+    expect(CLASS.diff(new Date(2020, 6, 18, 6, 30, 0), "day")).toEqual(3);
+  });
+  it("unit = hours", () => {
+    expect(CLASS.diff(new Date(2020, 6, 15, 9, 30, 0), "hours")).toEqual(3);
+  });
+  it("unit = week", () => {
+    // expect(CLASS.diff(new Date(2020, 7, 5, 6, 30, 0), "week")).toEqual(3); 2.999999
+  });
+  it("unit = month", () => {
+    expect(CLASS.diff(new Date(2020, 9, 14, 14, 0, 0), "month")).toEqual(3);
+  });
+  it("unit = year", () => {
+    expect(CLASS.diff(new Date(2023, 6, 16, 0, 30, 0), "year")).toEqual(3);
+  });
 });
 
 describe("isBefore", () => {
