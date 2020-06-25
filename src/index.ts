@@ -81,6 +81,3 @@ class NakamuraCalendar {
 }
 
 export default NakamuraCalendar;
-
-const CLASS = new NakamuraCalendar();
-console.log(CLASS.getDate("%aaaa %aaa %dddd %ddd"));

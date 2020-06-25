@@ -76,5 +76,3 @@ var NakamuraCalendar = /** @class */ (function () {
     return NakamuraCalendar;
 }());
 exports.default = NakamuraCalendar;
-var CLASS = new NakamuraCalendar();
-console.log(CLASS.getDate("%aaaa %aaa %dddd %ddd"));
