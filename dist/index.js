@@ -1,3 +1,9 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var replace_1 = __importDefault(require("./lib/replace"));
 var NakamuraCalendar = /** @class */ (function () {
     function NakamuraCalendar(date) {
         if (date === void 0) { date = new Date(); }
@@ -42,37 +48,7 @@ var NakamuraCalendar = /** @class */ (function () {
         return false;
     };
     NakamuraCalendar.prototype.format = function (format) {
-        var _this = this;
-        var result;
-        result = format
-            .replace(/%Y/gi, String(this.date.getFullYear()))
-            .replace(/%M/g, String(this.date.getMonth() + 1))
-            .replace(/%D/gi, String(this.date.getDate()))
-            .replace(/%hh/gi, function () {
-            var hours = _this.date.getHours();
-            if (hours < 10) {
-                return "0" + hours;
-            }
-            return String(hours);
-        })
-            .replace(/%mm/g, function () {
-            var minutes = _this.date.getMinutes();
-            if (minutes < 10) {
-                return "0" + minutes;
-            }
-            return String(minutes);
-        })
-            .replace(/%ss/gi, function () {
-            var seconds = _this.date.getSeconds();
-            if (seconds < 10) {
-                return "0" + seconds;
-            }
-            return String(seconds);
-        })
-            .replace(/%h/gi, String(this.date.getHours()))
-            .replace(/%m/g, String(this.date.getMinutes()))
-            .replace(/%s/gi, String(this.date.getSeconds()));
-        return result;
+        return replace_1.default(this.date, format);
     };
     NakamuraCalendar.prototype.getMillisecond = function (unit) {
         var millisecond;
@@ -99,4 +75,4 @@ var NakamuraCalendar = /** @class */ (function () {
     };
     return NakamuraCalendar;
 }());
-export default NakamuraCalendar;
+exports.default = NakamuraCalendar;

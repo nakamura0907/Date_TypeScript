@@ -1,3 +1,5 @@
+import replace from "./lib/replace";
+
 class NakamuraCalendar {
   private date: Date;
 
@@ -50,36 +52,7 @@ class NakamuraCalendar {
   }
 
   private format(format: string): string {
-    let result: string;
-    result = format
-      .replace(/%Y/gi, String(this.date.getFullYear()))
-      .replace(/%M/g, String(this.date.getMonth() + 1))
-      .replace(/%D/gi, String(this.date.getDate()))
-      .replace(/%hh/gi, () => {
-        let hours = this.date.getHours();
-        if (hours < 10) {
-          return "0" + hours;
-        }
-        return String(hours);
-      })
-      .replace(/%mm/g, () => {
-        let minutes = this.date.getMinutes();
-        if (minutes < 10) {
-          return "0" + minutes;
-        }
-        return String(minutes);
-      })
-      .replace(/%ss/gi, () => {
-        let seconds = this.date.getSeconds();
-        if (seconds < 10) {
-          return "0" + seconds;
-        }
-        return String(seconds);
-      })
-      .replace(/%h/gi, String(this.date.getHours()))
-      .replace(/%m/g, String(this.date.getMinutes()))
-      .replace(/%s/gi, String(this.date.getSeconds()));
-    return result;
+    return replace(this.date, format);
   }
 
   private getMillisecond(unit: string): number {
