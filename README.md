@@ -4,10 +4,10 @@
 
 ## リファレンス
 
-#### new NakamuraCalendar(Date)
+#### new NakamuraCalendar(Date?)
 
 - 引数
-  - Date: Date オブジェクト
+  - Date(option): Date オブジェクト
 
 #### setDate(Date)
 
@@ -16,7 +16,7 @@
 - 返り値
   - this
 
-#### getDate([format = ""])
+#### getDate(format? = "")
 
 - 引数
   - format(option): format を指定します
@@ -26,7 +26,7 @@
 - 例
   - getDate(%y 年%M/%d %hh:%mm:%ss 秒) // 2020 年 12/30 12:00:00 秒
 
-#### add(number, [unit = "day"], [flag = false])
+#### add(number, unit? = "day", flag? = false)
 
 - 説明
   引数 number に指定した時間が経過した後の日付を取得できます
@@ -40,7 +40,7 @@
 - 例
   - add(3, "year", false) // 3 年後の日付を引数とした NakamuraCalendar オブジェクト
 
-#### diff(Date, [unit = "day"])
+#### diff(Date, unit? = "day")
 
 - 説明
   引数 Date との差を取得することができます
